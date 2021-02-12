@@ -1,5 +1,5 @@
-/****************************************************************************************** 
- *	Chili DirectX Framework Version 16.07.20											  *	
+/******************************************************************************************
+ *	Chili DirectX Framework Version 16.07.20											  *
  *	Game.cpp																			  *
  *	Copyright 2016 PlanetChili.net <http://www.planetchili.net>							  *
  *																						  *
@@ -21,18 +21,17 @@
 #include "MainWindow.h"
 #include "Game.h"
 
-//mine
-
-Game::Game( MainWindow& wnd )
+Game::Game(MainWindow& wnd)
 	:
-	wnd( wnd ),
-	gfx( wnd )
+	wnd(wnd),
+	gfx(wnd),
+	ball(Vec2(Graphics::ScreenHeight / 2, Graphics::ScreenHeight / 2), Vec2(300.0f, 300.0f))
 {
 }
 
 void Game::Go()
 {
-	gfx.BeginFrame();	
+	gfx.BeginFrame();
 	UpdateModel();
 	ComposeFrame();
 	gfx.EndFrame();
@@ -40,8 +39,12 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	float const dt = frameTimer.Mark();
+
+	ball.move(dt);
 }
 
 void Game::ComposeFrame()
 {
+	ball.draw(gfx);
 }
