@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "FrameTimer.h"
 #include "Ball.h"
+#include "Brick.h"
 
 class Game
 {
@@ -44,6 +45,12 @@ private:
 	Graphics gfx;
 	FrameTimer frameTimer;
 	Ball ball;
+	static int constexpr bricksAmountHorizontally = 15;
+	static int constexpr bricksAmountVertically = 6;
+	static int constexpr nBricks = bricksAmountHorizontally * bricksAmountVertically;
+	static float constexpr brickWidth = Graphics::ScreenWidth / 15;
+	static float constexpr brickHeight = Graphics::ScreenHeight / 30;
+	Brick bricks[nBricks];
 	/********************************/
 	/*  User Variables              */
 	/********************************/

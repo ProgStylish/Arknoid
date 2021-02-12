@@ -27,6 +27,13 @@ Game::Game(MainWindow& wnd)
 	gfx(wnd),
 	ball(Vec2(Graphics::ScreenHeight / 2, Graphics::ScreenHeight / 2), Vec2(300.0f, 300.0f))
 {
+	int k = 0 ;
+	for (int i = 0; i < bricksAmountHorizontally; i++) {
+		for (int j = 10; j < bricksAmountVertically + 10; j++) {
+			bricks[k] = Brick(Vec2(i*brickWidth, j*brickHeight));
+			k++;
+		}
+	}
 }
 
 void Game::Go()
@@ -46,5 +53,18 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	for (Brick& b : bricks) {
+		if (!b.destroyed) {
+			b.draw(gfx, Color(Colors::Green));
+		}
+	}
+	for (Brick& b : bricks) {
+		if (!b.destroyed) {
+			b.destroyed = ball.isColliding(b.position, b.width, b.height);
+			if (b.destroyed) {
+				break;
+			}
+		}
+	}
 	ball.draw(gfx);
 }

@@ -18,6 +18,40 @@ void Ball::move(float dt)
 	clamp();
 }
 
+boolean Ball::isColliding(Vec2& brick_position, float width, float height)
+{
+	if (position.x - radius < brick_position.x + width &&
+		position.x - radius > brick_position.x &&
+		position.y > brick_position.y &&
+		position.y < brick_position.y + height) {
+		speed.x *= -1;
+		return true;
+	}
+	if (position.x + radius < brick_position.x + width &&
+		position.x + radius > brick_position.x &&
+		position.y > brick_position.y &&
+		position.y < brick_position.y + height) {
+		speed.x *= -1;
+		return true;
+	}
+	if (position.y - radius < brick_position.y + height &&
+		position.y - radius > brick_position.y &&
+		position.x > brick_position.x &&
+		position.x < brick_position.x + width) {
+		speed.y *= -1;
+		return true;
+	}
+	
+	if (position.y + radius < brick_position.y + height &&
+		position.y + radius > brick_position.y &&
+		position.x > brick_position.x &&
+		position.x < brick_position.x + width) {
+		speed.y *= -1;
+		return true;
+	}
+	return false;
+}
+
 void Ball::clamp()
 {
 	if (position.x + radius >= Graphics::ScreenWidth) {
