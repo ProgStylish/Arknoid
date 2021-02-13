@@ -26,6 +26,7 @@
 #include "FrameTimer.h"
 #include "Ball.h"
 #include "Brick.h"
+#include "Paddle.h"
 
 class Game
 {
@@ -36,7 +37,7 @@ public:
 	void Go();
 private:
 	void ComposeFrame();
-	void UpdateModel();
+	void UpdateModel(float dt);
 	/********************************/
 	/*  User Functions              */
 	/********************************/
@@ -44,13 +45,14 @@ private:
 	MainWindow& wnd;
 	Graphics gfx;
 	FrameTimer frameTimer;
-	Ball ball;
 	static int constexpr bricksAmountHorizontally = 15;
 	static int constexpr bricksAmountVertically = 6;
 	static int constexpr nBricks = bricksAmountHorizontally * bricksAmountVertically;
 	static float constexpr brickWidth = Graphics::ScreenWidth / 15;
 	static float constexpr brickHeight = Graphics::ScreenHeight / 30;
 	Brick bricks[nBricks];
+	Ball ball;
+	Paddle paddle;
 	/********************************/
 	/*  User Variables              */
 	/********************************/

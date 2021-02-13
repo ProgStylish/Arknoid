@@ -25,12 +25,14 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	ball(Vec2(Graphics::ScreenHeight / 2, Graphics::ScreenHeight / 2), Vec2(300.0f, 300.0f))
+	ball(Vec2(Graphics::ScreenHeight / 2, Graphics::ScreenHeight / 2), Vec2(250.0f, 250.0f)),
+	paddle(Vec2(Graphics::ScreenHeight / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10),
+		Vec2(400.0f, 0))
 {
-	int k = 0 ;
+	int k = 0;
 	for (int i = 0; i < bricksAmountHorizontally; i++) {
-		for (int j = 10; j < bricksAmountVertically + 10; j++) {
-			bricks[k] = Brick(Vec2(i*brickWidth, j*brickHeight));
+		for (int j = 2; j < bricksAmountVertically + 2; j++) {
+			bricks[k] = Brick(Vec2(i * brickWidth, j * brickHeight));
 			k++;
 		}
 	}
@@ -39,16 +41,24 @@ Game::Game(MainWindow& wnd)
 void Game::Go()
 {
 	gfx.BeginFrame();
-	UpdateModel();
+	float elapsedTime = frameTimer.Mark();
+	while (elapsedTime > 0.0f) {
+		const float dt = std::min(elapsedTime, 0.0025f);
+		UpdateModel(dt);
+		elapsedTime -= dt;
+	}
 	ComposeFrame();
 	gfx.EndFrame();
 }
 
-void Game::UpdateModel()
+void Game::UpdateModel(float dt)
 {
-	float const dt = frameTimer.Mark();
-
 	ball.move(dt);
+	ball.clamp(paddle.cooldown);
+	paddle.move(wnd.kbd, dt);
+	if (!paddle.cooldown) {
+		paddle.cooldown = ball.isColliding(paddle.position, paddle.width, paddle.height);
+	}
 }
 
 void Game::ComposeFrame()
@@ -62,9 +72,11 @@ void Game::ComposeFrame()
 		if (!b.destroyed) {
 			b.destroyed = ball.isColliding(b.position, b.width, b.height);
 			if (b.destroyed) {
+				paddle.cooldown = false;
 				break;
 			}
 		}
 	}
 	ball.draw(gfx);
+	paddle.draw(gfx, Color(Colors::Red));
 }

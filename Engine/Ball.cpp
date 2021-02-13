@@ -15,10 +15,9 @@ void Ball::draw(Graphics& gfx) const
 void Ball::move(float dt)
 {
 	position += speed * dt;
-	clamp();
 }
 
-boolean Ball::isColliding(Vec2& brick_position, float width, float height)
+bool Ball::isColliding(Vec2& brick_position, float width, float height)
 {
 	if (position.x - radius < brick_position.x + width &&
 		position.x - radius > brick_position.x &&
@@ -52,22 +51,26 @@ boolean Ball::isColliding(Vec2& brick_position, float width, float height)
 	return false;
 }
 
-void Ball::clamp()
+void Ball::clamp(bool& paddleCooldown)
 {
 	if (position.x + radius >= Graphics::ScreenWidth) {
 		position.x = Graphics::ScreenWidth - radius;
 		speed.x *= -1;
+		paddleCooldown = false;
 	}
 	if (position.x - radius <= 0) {
 		position.x = radius;
 		speed.x *= -1;
+		paddleCooldown = false;
 	}
 	if (position.y + radius >= Graphics::ScreenHeight) {
 		position.y = Graphics::ScreenHeight - radius;
 		speed.y *= -1;
+		paddleCooldown = false;
 	}
 	if (position.y - radius <= 0) {
 		position.y = radius;
 		speed.y *= -1;
+		paddleCooldown = false;
 	}
 }
