@@ -37,6 +37,7 @@ public:
 	void Go();
 private:
 	void ComposeFrame();
+	void CheckBricksCollision();
 	void UpdateModel(float dt);
 	/********************************/
 	/*  User Functions              */
@@ -46,7 +47,7 @@ private:
 	Graphics gfx;
 	FrameTimer frameTimer;
 	static int constexpr bricksAmountHorizontally = 15;
-	static int constexpr bricksAmountVertically = 6;
+	static int constexpr bricksAmountVertically = 15;
 	static int constexpr nBricks = bricksAmountHorizontally * bricksAmountVertically;
 	static float constexpr brickWidth = Graphics::ScreenWidth / 15;
 	static float constexpr brickHeight = Graphics::ScreenHeight / 30;

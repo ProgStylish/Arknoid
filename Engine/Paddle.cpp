@@ -24,6 +24,5 @@ void Paddle::move(Keyboard& kbd, float dt) {
 }
 
 void Paddle::draw(Graphics& gfx, Color& c) const {
-	gfx.DrawRect(int(position.x), int(position.y), 
-		int(position.x + width), int(position.y + height), c);
+	gfx.DrawPaddle(int(position.x), int(position.y), int(width), int(height));
 }

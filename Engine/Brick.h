@@ -6,6 +6,7 @@ class Brick {
 public:
 	Brick() = default;
 	Brick(Vec2& position);
+	Vec2 getCenter() const;
 	void draw(Graphics& gfx, Color& c) const;
 	bool destroyed = false;
 	float width = Graphics::ScreenWidth / 15;

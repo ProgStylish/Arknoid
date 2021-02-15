@@ -25,14 +25,17 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	ball(Vec2(Graphics::ScreenHeight / 2, Graphics::ScreenHeight / 2), Vec2(250.0f, 250.0f)),
-	paddle(Vec2(Graphics::ScreenHeight / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10),
-		Vec2(400.0f, 0))
+	ball(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight/10), Vec2(100.0f, 100.0f)),
+	paddle(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10),
+		Vec2(450.0f, 0))
 {
 	int k = 0;
 	for (int i = 0; i < bricksAmountHorizontally; i++) {
-		for (int j = 2; j < bricksAmountVertically + 2; j++) {
+		for (int j = 5; j < bricksAmountVertically + 5; j++) {
 			bricks[k] = Brick(Vec2(i * brickWidth, j * brickHeight));
+			if (i % 2 == 0) {
+				bricks[k].destroyed = true;
+			}
 			k++;
 		}
 	}
@@ -43,7 +46,7 @@ void Game::Go()
 	gfx.BeginFrame();
 	float elapsedTime = frameTimer.Mark();
 	while (elapsedTime > 0.0f) {
-		const float dt = std::min(elapsedTime, 0.0025f);
+		const float dt = std::min(0.0025f, elapsedTime);
 		UpdateModel(dt);
 		elapsedTime -= dt;
 	}
@@ -57,8 +60,11 @@ void Game::UpdateModel(float dt)
 	ball.clamp(paddle.cooldown);
 	paddle.move(wnd.kbd, dt);
 	if (!paddle.cooldown) {
-		paddle.cooldown = ball.isColliding(paddle.position, paddle.width, paddle.height);
+		if (paddle.cooldown = ball.isColliding(paddle.position, paddle.width, paddle.height)) {
+			ball.paddleCollide(paddle.position, paddle.width, paddle.height);
+		}
 	}
+	CheckBricksCollision();
 }
 
 void Game::ComposeFrame()
@@ -68,15 +74,31 @@ void Game::ComposeFrame()
 			b.draw(gfx, Color(Colors::Green));
 		}
 	}
-	for (Brick& b : bricks) {
-		if (!b.destroyed) {
-			b.destroyed = ball.isColliding(b.position, b.width, b.height);
-			if (b.destroyed) {
+	ball.draw(gfx);
+	paddle.draw(gfx, Color(Colors::Red));
+}
+
+void Game::CheckBricksCollision() {
+	int index = 0;
+	bool collisionHappened = false;
+	for (int i = 0; i < nBricks; i++) {
+		if (!bricks[i].destroyed) {
+			float bestDistance = 10000000.0f;
+			float currentDistance;
+			if (ball.isColliding(bricks[i].position, bricks[i].width, bricks[i].height)) {
+				currentDistance = (ball.getPosition() - bricks[i].getCenter()).GetLengthSq();
+				if (currentDistance < bestDistance) {
+					bestDistance = currentDistance;
+					index = i;
+				}
+				collisionHappened = true;
 				paddle.cooldown = false;
-				break;
 			}
 		}
 	}
-	ball.draw(gfx);
-	paddle.draw(gfx, Color(Colors::Red));
+
+	if (collisionHappened) {
+		ball.brickCollide(bricks[index].position, bricks[index].width, bricks[index].height);
+		bricks[index].destroyed = true;
+	}
 }
