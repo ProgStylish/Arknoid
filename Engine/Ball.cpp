@@ -28,19 +28,14 @@ void Ball::paddleCollide(Vec2& brick_position, float width, float height) {
 		position.y + radius >= brick_position.y &&
 		position.x >= brick_position.x &&
 		position.x <= brick_position.x + width) {
-		resetSpeed();
 		const float xBrickCollisionPoint = position.x - brick_position.x;
-		if (xBrickCollisionPoint - position.x < 3.0f * width / 8.0f) {
-			speed.x = xBrickCollisionPoint * ((2.5f * speed.y) / (3.0f * float(width) / 8.0f)) - 3.5f * speed.y;
-			speed.y *= -2.0f;
-		}
-		else if (xBrickCollisionPoint - position.x > 5.0f * width / 8.0f) {
-			speed.x = xBrickCollisionPoint * ((3.5f * speed.y) / (3.0f * float(width) / 8.0f)) + (9.5f * speed.y / 3.0f);
-			speed.y *= -2.0f;
+		if (xBrickCollisionPoint > 3 * width / 8 && xBrickCollisionPoint < 5 * width / 8) {
+			speed.y *= -1.0f;
 		}
 		else {
-			speed.x = 3*speed.y/2;
-			speed.y *= -2.5f;
+			resetSpeed();
+			speed.x = xBrickCollisionPoint * (4.0f * speed.y / width) - (2.0f * speed.y);
+			speed.y *= -1.75f;
 		}
 	}
 	if (position.x - radius <= brick_position.x + width &&

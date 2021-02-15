@@ -1,8 +1,8 @@
 #include "Brick.h"
 
-Brick::Brick(Vec2& in_position)
+Brick::Brick(Vec2& in_position) :
+	position(in_position)
 {
-	position = in_position;
 }
 
 Vec2 Brick::getCenter() const
@@ -12,6 +12,6 @@ Vec2 Brick::getCenter() const
 
 void Brick::draw(Graphics& gfx, Color& c) const
 {
-	gfx.DrawRect(int(position.x) + 1, int(position.y) + 1,
-		int(position.x + width) - 1, int(position.y + height) - 1, c);
+	gfx.DrawRect(int(position.x), int(position.y),
+		int(position.x + width), int(position.y + height), c);
 }

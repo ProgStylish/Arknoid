@@ -25,14 +25,14 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	ball(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight/10), Vec2(100.0f, 100.0f)),
+	ball(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10), Vec2(100.0f, 100.0f)),
 	paddle(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10),
 		Vec2(450.0f, 0))
 {
 	int k = 0;
 	for (int i = 0; i < bricksAmountHorizontally; i++) {
-		for (int j = 5; j < bricksAmountVertically + 5; j++) {
-			bricks[k] = Brick(Vec2(i * brickWidth, j * brickHeight));
+		for (int j = 2; j < bricksAmountVertically + 2; j++) {
+			bricks[k] = Brick(Vec2(xStartPoint + i * (brickWidth + bricketsDistance), j * (brickHeight + bricketsDistance)));
 			if (i % 2 == 0) {
 				bricks[k].destroyed = true;
 			}

@@ -46,11 +46,14 @@ private:
 	MainWindow& wnd;
 	Graphics gfx;
 	FrameTimer frameTimer;
-	static int constexpr bricksAmountHorizontally = 15;
-	static int constexpr bricksAmountVertically = 15;
+	static int constexpr bricksAmountHorizontally = 14;
+	static int constexpr bricksAmountVertically = 12;
 	static int constexpr nBricks = bricksAmountHorizontally * bricksAmountVertically;
+	static float constexpr bricketsDistance = 2.0f;
 	static float constexpr brickWidth = Graphics::ScreenWidth / 15;
 	static float constexpr brickHeight = Graphics::ScreenHeight / 30;
+	static float constexpr xStartPoint = (Graphics::ScreenWidth - bricksAmountHorizontally*(brickWidth+bricketsDistance))/2;
+	static float constexpr yStartPoint = 0;
 	Brick bricks[nBricks];
 	Ball ball;
 	Paddle paddle;
