@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include <cmath>
 
 Game::Game(MainWindow& wnd)
 	:
@@ -27,7 +28,7 @@ Game::Game(MainWindow& wnd)
 	gfx(wnd),
 	ball(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10), Vec2(100.0f, 100.0f)),
 	paddle(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10),
-		Vec2(450.0f, 0))
+		Vec2(350.0f, 0))
 {
 	int k = 0;
 	for (int i = 0; i < bricksAmountHorizontally; i++) {

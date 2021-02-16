@@ -38,23 +38,73 @@ void Ball::paddleCollide(Vec2& brick_position, float width, float height) {
 			speed.y *= -1.75f;
 		}
 	}
-	if (position.x - radius <= brick_position.x + width &&
+	else if (position.x - radius <= brick_position.x + width &&
 		position.x - radius >= brick_position.x &&
 		position.y >= brick_position.y &&
 		position.y <= brick_position.y + height) {
-		speed.x *= -1.0f;
+		resetSpeed();
+		speed.x = 2.0f * speed.y;
+		speed.y *= -1.0f;
 	}
-	if (position.x + radius < brick_position.x + width &&
+	else if (position.x + radius < brick_position.x + width &&
 		position.x + radius > brick_position.x &&
 		position.y >= brick_position.y &&
 		position.y <= brick_position.y + height) {
-		speed.x *= -1.0f;
+		resetSpeed();
+		speed.x = -2.0f * speed.y;
+		speed.y *= -1.0f;
 	}
-	if (position.y - radius <= brick_position.y + height &&
+	else if (position.y - radius <= brick_position.y + height &&
 		position.y - radius >= brick_position.y &&
 		position.x >= brick_position.x &&
 		position.x <= brick_position.x + width) {
 		speed.y *= -1.0f;
+	}
+	else if ((position - Vec2(brick_position.x, brick_position.y)).GetLength() <= radius) {
+		resetSpeed();
+		speed.x = -2.0f * speed.y;
+		speed.y *= -1.75f;
+	}
+	else if ((position - Vec2(brick_position.x + width, brick_position.y)).GetLength() <= radius) {
+		resetSpeed();
+		speed.x = 2.0f * speed.y;
+		speed.y *= -1.75f;
+	}
+	else if ((position - Vec2(brick_position.x, brick_position.y + height)).GetLength() <= radius) {
+		if (speed.y > 0) {
+			speed.x *= -1.0f;
+		}
+		else {
+			if (speed.x < 0) {
+				speed.y *= -1.0f;
+			}
+			else {
+				if (((brick_position.y + height) - (position.y - radius)) >= ((position.x + radius) - (brick_position.x))) {
+					speed.x *= -1.0f;
+				}
+				else {
+					speed.y *= -1.0f;
+				}
+			}
+		}
+	}
+	else if ((position - Vec2(brick_position.x + width, brick_position.y + height)).GetLength() <= radius) {
+		if (speed.y > 0) {
+			speed.x *= -1.0f;
+		}
+		else {
+			if (speed.x < 0) {
+				if (((brick_position.y + height) - (position.y - radius)) >= ((brick_position.x + width) - (position.x - radius))) {
+					speed.x *= -1.0f;
+				}
+				else {
+					speed.y *= -1.0f;
+				}
+			}
+			else {
+				speed.y *= -1.0f;
+			}
+		}
 	}
 }
 
@@ -65,26 +115,26 @@ void Ball::brickCollide(Vec2& brick_position, float width, float height) {
 		position.x <= brick_position.x + width) {
 		speed.y *= -1.0f;
 	}
-	 else if (position.y - radius <= brick_position.y + height &&
+	else if (position.y - radius <= brick_position.y + height &&
 		position.y - radius >= brick_position.y &&
 		position.x >= brick_position.x &&
 		position.x <= brick_position.x + width) {
 		speed.y *= -1.0f;
 	}
-	 else if (position.x - radius <= brick_position.x + width &&
+	else if (position.x - radius <= brick_position.x + width &&
 		position.x - radius >= brick_position.x &&
 		position.y >= brick_position.y &&
 		position.y <= brick_position.y + height) {
 		speed.x *= -1.0f;
 	}
-	 else if (position.x + radius < brick_position.x + width &&
+	else if (position.x + radius < brick_position.x + width &&
 		position.x + radius > brick_position.x &&
 		position.y >= brick_position.y &&
 		position.y <= brick_position.y + height) {
 		speed.x *= -1.0f;
 	}
 
-	 else if ((position - Vec2(brick_position.x, brick_position.y)).GetLength() <= radius) {
+	else if ((position - Vec2(brick_position.x, brick_position.y)).GetLength() <= radius) {
 		if (speed.y > 0) {
 			if (speed.x < 0) {
 				speed.y *= -1.0f;
@@ -102,7 +152,7 @@ void Ball::brickCollide(Vec2& brick_position, float width, float height) {
 			speed.x *= -1.0f;
 		}
 	}
-	 else if ((position - Vec2(brick_position.x + width, brick_position.y)).GetLength() <= radius) {
+	else if ((position - Vec2(brick_position.x + width, brick_position.y)).GetLength() <= radius) {
 		if (speed.y > 0) {
 			if (speed.x > 0) {
 				speed.y *= -1.0f;

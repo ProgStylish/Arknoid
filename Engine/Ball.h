@@ -16,6 +16,6 @@ private:
 	static constexpr float radius = 7.0f;
 	Vec2 position;
 	Vec2 speed;
-	float const xSpeed = 200;
-	float const ySpeed = 200;
+	float const xSpeed = 180.0f;
+	float const ySpeed = 180.0;
 };

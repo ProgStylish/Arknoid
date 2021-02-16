@@ -303,7 +303,6 @@ void Graphics::EndFrame()
 
 void Graphics::BeginFrame()
 {
-	// clear the sysbuffer
 	memset(pSysBuffer, 0u, sizeof(Color) * Graphics::ScreenHeight * Graphics::ScreenWidth);
 }
 
@@ -314,6 +313,52 @@ void Graphics::PutPixel(int x, int y, Color c)
 	assert(y >= 0);
 	assert(y < int(Graphics::ScreenHeight));
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
+}
+
+void Graphics::DrawTriangle(int xT1, int yT1, int xT2, int yT2, int xT3, int yT3) {
+	int westX = xT1;
+	int westY = yT1;
+	int middleX = xT2;
+	int middleY = yT2;
+	int eastX = xT3;
+	int eastY = yT3;
+	int shiftingX = 0;
+	int shiftingY = 0;
+	if (xT2 < xT1) {
+		westX = xT2;
+		westY = yT2;
+		middleX = xT1;
+		middleY = yT1;
+		if (xT3 < xT2) {
+			eastX = xT1;
+			eastY = yT1;
+			middleX = xT2;
+			middleY = yT2;
+			westX = xT3;
+			westY = yT3;
+		}
+		else if(xT3 < xT1){
+			middleX = xT3;
+			middleY = yT3;
+			eastX = xT1;
+			eastY = yT1;
+		}
+		float slopeMiddleWest = (middleY - westY) / (middleX - westX);
+		float slopeMiddleEast = (middleY - eastY) / (middleX - eastX);
+		float slopeWestEast = (eastY - westY) / (eastX - eastY);
+		for (int i = westX; i < eastX; i++)
+		{
+			//DrawLine
+		}
+	}
+}
+
+void Graphics::DrawLine(float x0, float y0, float x1, float y1, Color c) {
+	float slope = (y1-y0) / (x1-x0);
+	for (int i = int(x0); i < int(x1-x0); i++)
+	{
+		PutPixel(i, int(y0 + i*slope), c);
+	}
 }
 
 void Graphics::DrawRect(int x0, int y0, int x1, int y1, Color c)
