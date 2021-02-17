@@ -27,6 +27,7 @@
 #include "Ball.h"
 #include "Brick.h"
 #include "Paddle.h"
+#include "Border.h"
 
 class Game
 {
@@ -57,6 +58,7 @@ private:
 	Brick bricks[nBricks];
 	Ball ball;
 	Paddle paddle;
+	Border border;
 	/********************************/
 	/*  User Variables              */
 	/********************************/

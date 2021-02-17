@@ -315,15 +315,15 @@ void Graphics::PutPixel(int x, int y, Color c)
 	pSysBuffer[Graphics::ScreenWidth * y + x] = c;
 }
 
-void Graphics::DrawTriangle(int xT1, int yT1, int xT2, int yT2, int xT3, int yT3) {
-	int westX = xT1;
-	int westY = yT1;
-	int middleX = xT2;
-	int middleY = yT2;
-	int eastX = xT3;
-	int eastY = yT3;
-	int shiftingX = 0;
-	int shiftingY = 0;
+void Graphics::DrawTriangle(float xT1, float yT1, float xT2, float yT2, float xT3, float yT3, Color c) {
+	float westX = xT1;
+	float westY = yT1;
+	float middleX = xT2;
+	float middleY = yT2;
+	float eastX = xT3;
+	float eastY = yT3;
+	float shiftingX = 0;
+	float shiftingY = 0;
 	if (xT2 < xT1) {
 		westX = xT2;
 		westY = yT2;
@@ -337,27 +337,73 @@ void Graphics::DrawTriangle(int xT1, int yT1, int xT2, int yT2, int xT3, int yT3
 			westX = xT3;
 			westY = yT3;
 		}
-		else if(xT3 < xT1){
+		else if (xT3 < xT1) {
 			middleX = xT3;
 			middleY = yT3;
 			eastX = xT1;
 			eastY = yT1;
 		}
-		float slopeMiddleWest = (middleY - westY) / (middleX - westX);
-		float slopeMiddleEast = (middleY - eastY) / (middleX - eastX);
-		float slopeWestEast = (eastY - westY) / (eastX - eastY);
-		for (int i = westX; i < eastX; i++)
-		{
-			//DrawLine
+	}
+	else {
+		if (xT3 < xT2) {
+			middleX = xT3;
+			middleY = yT3;
+			eastX = xT2;
+			eastY = yT2;
+			if (xT3 < xT1) {
+				std::swap(westX, middleX);
+				std::swap(westY, middleY);
+			}
+		}
+	}
+
+	float slopeMiddleWest = (westY - middleY) / (westX - middleX);
+	if (westY < middleY) {
+		slopeMiddleWest = (middleY - westY) / ( middleX - westX);
+	}
+	float slopeMiddleEast = (eastY - middleY) / (eastX - middleX);
+	if (middleY < eastY) {
+		slopeMiddleEast = (eastY - middleY) / (eastX - middleX);
+	}
+	float slopeWestEast = (eastY - westY) / (eastX - westX);
+	if (eastY < westY) {
+		slopeWestEast = (westY - eastY) / (westX - eastX);
+	}
+	float middleWestDelta = westY - slopeMiddleWest * westX;
+	float westEastDelta = westY - slopeWestEast * westX;
+	float middleEastDelta = eastY - slopeMiddleEast * eastX;
+	for (int i = westX; i < eastX; i++)
+	{
+		if (i < middleX) {
+			DrawVLine(i, middleWestDelta + i * slopeMiddleWest, slopeWestEast * i + westEastDelta, c);
+		}
+		else {
+			DrawVLine(i, middleEastDelta + i * slopeMiddleEast, slopeWestEast * i + westEastDelta, c);
+
 		}
 	}
 }
 
 void Graphics::DrawLine(float x0, float y0, float x1, float y1, Color c) {
-	float slope = (y1-y0) / (x1-x0);
-	for (int i = int(x0); i < int(x1-x0); i++)
+	if (x0 > x1) {
+		std::swap(x0, x1);
+		std::swap(y0, y1);
+	}
+	float slope = (y1 - y0) / (x1 - x0);
+	float j = 0;
+	while (j < x1 - x0) {
+		PutPixel(x0 + j, int(y0 + j * slope), c);
+		j = j + 0.1f;
+	}
+}
+
+void Graphics::DrawVLine(float x, float y0, float y1, Color c) {
+	if (y1 < y0) {
+		std::swap(y0, y1);
+	}
+	for (int i = y0; i < y1; i++)
 	{
-		PutPixel(i, int(y0 + i*slope), c);
+		PutPixel(x, i, c);
 	}
 }
 

@@ -28,7 +28,8 @@ Game::Game(MainWindow& wnd)
 	gfx(wnd),
 	ball(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10), Vec2(100.0f, 100.0f)),
 	paddle(Vec2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight - Graphics::ScreenHeight / 10),
-		Vec2(350.0f, 0))
+		Vec2(350.0f, 0)),
+	border(Vec2(Graphics::ScreenWidth / 8, 0), 4 * Graphics::ScreenWidth / 5, Graphics::ScreenHeight)
 {
 	int k = 0;
 	for (int i = 0; i < bricksAmountHorizontally; i++) {
@@ -77,6 +78,8 @@ void Game::ComposeFrame()
 	}
 	ball.draw(gfx);
 	paddle.draw(gfx, Color(Colors::Red));
+	gfx.DrawTriangle(700, 600, 400, 300, 700, 200, Colors::Magenta);
+	border.draw(gfx);
 }
 
 void Game::CheckBricksCollision() {
