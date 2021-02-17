@@ -78,7 +78,6 @@ void Game::ComposeFrame()
 	}
 	ball.draw(gfx);
 	paddle.draw(gfx, Color(Colors::Red));
-	gfx.DrawTriangle(700, 600, 400, 300, 700, 200, Colors::Magenta);
 	border.draw(gfx);
 }
 
